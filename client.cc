@@ -40,8 +40,8 @@ main(void) {
   coap_register_response_handler(ctx, [](auto, auto, auto,
                                          coap_pdu_t *received,
                                          auto) {
-                                   coap_show_pdu(received);
-                                 });
+                                        coap_show_pdu(LOG_INFO, received);
+                                      });
   /* construct CoAP message */
   pdu = coap_pdu_init(COAP_MESSAGE_CON,
                       COAP_REQUEST_GET,
