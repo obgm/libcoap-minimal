@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <coap/coap.h>
+#include <coap2/coap.h>
 
 #include "common.hh"
 
