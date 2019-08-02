@@ -18,8 +18,7 @@ main(void) {
   coap_resource_t *resource = nullptr;
   coap_endpoint_t *endpoint = nullptr;
   int result = EXIT_FAILURE;;
-  coap_str_const_t ruri = { 5, (const uint8_t *)"hello" };
-
+  coap_str_const_t *ruri = coap_make_str_const("hello");
   coap_startup();
 
   /* resolve destination address where server should be sent */
@@ -36,7 +35,7 @@ main(void) {
     goto finish;
   }
 
-  resource = coap_resource_init(&ruri, 0);
+  resource = coap_resource_init(ruri, 0);
   coap_register_handler(resource, COAP_REQUEST_GET,
                         [](auto, auto, auto, auto, auto, auto,
                            coap_pdu_t *response) {

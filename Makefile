@@ -5,6 +5,8 @@ CPPFLAGS=-Wall -Wextra $(call pkgconfig,--cflags,$(LIBCOAP))
 LDLIBS=$(call pkgconfig,--libs,$(LIBCOAP))
 LINK.o=$(LINK.cc)
 
+CXXFLAGS=-std=c++14
+
 all: client server
 
 client:: client.o common.o
