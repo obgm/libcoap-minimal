@@ -1,6 +1,6 @@
 /* minimal CoAP server
  *
- * Copyright (C) 2018 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
  */
 
 #include <cstring>
@@ -37,15 +37,19 @@ main(void) {
 
   resource = coap_resource_init(ruri, 0);
   coap_register_handler(resource, COAP_REQUEST_GET,
-                        [](auto, auto, auto, auto, auto, auto,
+                        [](auto, auto, auto,
+                           coap_pdu_t *request,
+                           auto, auto,
                            coap_pdu_t *response) {
-                          response->code = COAP_RESPONSE_CODE(205);
+                          coap_show_pdu(LOG_WARNING, request);
+                          response->code = COAP_RESPONSE_CODE_CONTENT;
                           coap_add_data(response, 5,
                                         (const uint8_t *)"world");
+                          coap_show_pdu(LOG_WARNING, response);
                         });
   coap_add_resource(ctx, resource);
 
-  while (true) { coap_run_once(ctx, 0); }
+  while (true) { coap_io_process(ctx, COAP_IO_WAIT); }
 
   result = EXIT_SUCCESS;
  finish:

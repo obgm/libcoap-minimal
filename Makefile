@@ -1,3 +1,8 @@
+# Makefile for libcoap minimal examples
+#
+# Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
+#
+
 LIBCOAP?=libcoap-2-openssl
 
 pkgconfig=$(shell pkg-config $(1) $(2))
