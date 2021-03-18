@@ -1,3 +1,8 @@
+/* minimal CoAP functions
+ *
+ * Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
+ */
+
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -1,6 +1,6 @@
 /* minimal CoAP client
  *
- * Copyright (C) 2018 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
  */
 
 #include <cstring>
@@ -40,7 +40,8 @@ main(void) {
   coap_register_response_handler(ctx, [](auto, auto, auto,
                                          coap_pdu_t *received,
                                          auto) {
-                                        coap_show_pdu(LOG_INFO, received);
+                                        coap_show_pdu(LOG_WARNING, received);
+                                        return COAP_RESPONSE_OK;
                                       });
   /* construct CoAP message */
   pdu = coap_pdu_init(COAP_MESSAGE_CON,
@@ -56,10 +57,11 @@ main(void) {
   coap_add_option(pdu, COAP_OPTION_URI_PATH, 5,
                   reinterpret_cast<const uint8_t *>("hello"));
 
+  coap_show_pdu(LOG_WARNING, pdu);
   /* and send the PDU */
   coap_send(session, pdu);
 
-  coap_run_once(ctx, 0);
+  coap_io_process(ctx, COAP_IO_WAIT);
 
   result = EXIT_SUCCESS;
  finish:
