@@ -3,7 +3,7 @@
 # Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
 #
 
-LIBCOAP?=libcoap-2-openssl
+LIBCOAP?=libcoap-3
 
 pkgconfig=$(shell pkg-config $(1) $(2))
 CPPFLAGS=-Wall -Wextra $(call pkgconfig,--cflags,$(LIBCOAP))

@@ -7,8 +7,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <coap2/coap.h>
-
 #include "common.hh"
 
 int
@@ -37,15 +35,15 @@ main(void) {
   }
 
   /* coap_register_response_handler(ctx, response_handler); */
-  coap_register_response_handler(ctx, [](auto, auto, auto,
-                                         coap_pdu_t *received,
+  coap_register_response_handler(ctx, [](auto, auto,
+                                         const coap_pdu_t *received,
                                          auto) {
                                         coap_show_pdu(LOG_WARNING, received);
                                         return COAP_RESPONSE_OK;
                                       });
   /* construct CoAP message */
   pdu = coap_pdu_init(COAP_MESSAGE_CON,
-                      COAP_REQUEST_GET,
+                      COAP_REQUEST_CODE_GET,
                       0 /* message id */,
                       coap_session_max_pdu_size(session));
   if (!pdu) {

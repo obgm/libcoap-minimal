@@ -7,8 +7,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <coap2/coap.h>
-
 #include "common.hh"
 
 int
@@ -37,12 +35,12 @@ main(void) {
 
   resource = coap_resource_init(ruri, 0);
   coap_register_handler(resource, COAP_REQUEST_GET,
-                        [](auto, auto, auto,
-                           coap_pdu_t *request,
-                           auto, auto,
+                        [](auto, auto,
+                           const coap_pdu_t *request,
+                           auto,
                            coap_pdu_t *response) {
                           coap_show_pdu(LOG_WARNING, request);
-                          response->code = COAP_RESPONSE_CODE_CONTENT;
+                          coap_pdu_set_code(response, COAP_RESPONSE_CODE_CONTENT);
                           coap_add_data(response, 5,
                                         (const uint8_t *)"world");
                           coap_show_pdu(LOG_WARNING, response);
