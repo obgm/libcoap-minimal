@@ -1,7 +1,7 @@
 Minimal CoAP Client and Server Examples for libcoap
 ===================================================
 
-These examples require [libcoap-2](https://github.com/obgm/libcoap) to
+These examples require [libcoap-3](https://github.com/obgm/libcoap) to
 work.
 
 `client.cc` shows a minimal libcoap client that sends a confirmable
