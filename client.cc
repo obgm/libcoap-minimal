@@ -44,7 +44,7 @@ main(void) {
   /* construct CoAP message */
   pdu = coap_pdu_init(COAP_MESSAGE_CON,
                       COAP_REQUEST_CODE_GET,
-                      0 /* message id */,
+                      coap_new_message_id(session),
                       coap_session_max_pdu_size(session));
   if (!pdu) {
     coap_log( LOG_EMERG, "cannot create PDU\n" );
