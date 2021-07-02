@@ -9,6 +9,8 @@
 
 #include "common.hh"
 
+static int have_response = 0;
+
 int
 main(void) {
   coap_context_t  *ctx = nullptr;
@@ -19,6 +21,9 @@ main(void) {
 
   coap_startup();
 
+  /* Set logging level */
+  coap_set_log_level(LOG_WARNING);
+
   /* resolve destination address where server should be sent */
   if (resolve_address("coap.me", "5683", &dst) < 0) {
     coap_log(LOG_CRIT, "failed to resolve address\n");
@@ -26,9 +31,15 @@ main(void) {
   }
 
   /* create CoAP context and a client session */
-  ctx = coap_new_context(nullptr);
+  if (!(ctx = coap_new_context(nullptr))) {
+    coap_log(LOG_EMERG, "cannot create libcoap context\n");
+    goto finish;
+  }
+  /* Support large responses */
+  coap_context_set_block_mode(ctx,
+                  COAP_BLOCK_USE_LIBCOAP | COAP_BLOCK_SINGLE_BODY);
 
-  if (!ctx || !(session = coap_new_client_session(ctx, nullptr, &dst,
+  if (!(session = coap_new_client_session(ctx, nullptr, &dst,
                                                   COAP_PROTO_UDP))) {
     coap_log(LOG_EMERG, "cannot create client session\n");
     goto finish;
@@ -38,6 +49,7 @@ main(void) {
   coap_register_response_handler(ctx, [](auto, auto,
                                          const coap_pdu_t *received,
                                          auto) {
+                                        have_response = 1;
                                         coap_show_pdu(LOG_WARNING, received);
                                         return COAP_RESPONSE_OK;
                                       });
@@ -59,7 +71,8 @@ main(void) {
   /* and send the PDU */
   coap_send(session, pdu);
 
-  coap_io_process(ctx, COAP_IO_WAIT);
+  while (have_response == 0)
+    coap_io_process(ctx, COAP_IO_WAIT);
 
   result = EXIT_SUCCESS;
  finish:
