@@ -1,6 +1,6 @@
 /* minimal CoAP server
  *
- * Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2018-2023 Olaf Bergmann <bergmann@tzi.org>
  */
 
 #include <cstring>
@@ -21,7 +21,7 @@ main(void) {
 
   /* resolve destination address where server should be sent */
   if (resolve_address("localhost", "5683", &dst) < 0) {
-    coap_log(LOG_CRIT, "failed to resolve address\n");
+    coap_log_crit("failed to resolve address\n");
     goto finish;
   }
 
@@ -29,7 +29,7 @@ main(void) {
   ctx = coap_new_context(nullptr);
 
   if (!ctx || !(endpoint = coap_new_endpoint(ctx, &dst, COAP_PROTO_UDP))) {
-    coap_log(LOG_EMERG, "cannot initialize context\n");
+    coap_log_emerg("cannot initialize context\n");
     goto finish;
   }
 
@@ -39,11 +39,11 @@ main(void) {
                            const coap_pdu_t *request,
                            auto,
                            coap_pdu_t *response) {
-                          coap_show_pdu(LOG_WARNING, request);
+                          coap_show_pdu(COAP_LOG_WARN, request);
                           coap_pdu_set_code(response, COAP_RESPONSE_CODE_CONTENT);
                           coap_add_data(response, 5,
                                         (const uint8_t *)"world");
-                          coap_show_pdu(LOG_WARNING, response);
+                          coap_show_pdu(COAP_LOG_WARN, response);
                         });
   coap_add_resource(ctx, resource);
 

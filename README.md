@@ -12,7 +12,7 @@ response.
 `server.cc` is a minimal CoAP UDP server that binds on
 `localhost:5683`. It has a single resource `/hello`.
 
-Copyright (C) 2018-2021 Olaf Bergmann <bergmann@tzi.org>
+Copyright (C) 2018-2023 Olaf Bergmann <bergmann@tzi.org>
 
 License
 =======
