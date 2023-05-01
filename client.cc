@@ -69,7 +69,10 @@ main(void) {
 
   coap_show_pdu(COAP_LOG_WARN, pdu);
   /* and send the PDU */
-  coap_send(session, pdu);
+  if (coap_send(session, pdu) == COAP_INVALID_MID) {
+    coap_log_err("cannot send CoAP pdu\n");
+    goto finish;
+  }
 
   while (have_response == 0)
     coap_io_process(ctx, COAP_IO_WAIT);
