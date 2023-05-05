@@ -1,6 +1,6 @@
 /* minimal CoAP functions
  *
- * Copyright (C) 2018-2023 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2018-2024 Olaf Bergmann <bergmann@tzi.org>
  */
 
 #include <cstdio>
@@ -11,38 +11,19 @@
 #include "common.hh"
 
 int
-resolve_address(const char *host, const char *service, coap_address_t *dst) {
+resolve_address(coap_str_const_t *host, uint16_t port, coap_address_t *dst,
+                int scheme_hint_bits) {
+  int ret = 0;
+  coap_addr_info_t *addr_info;
 
-  struct addrinfo *res, *ainfo;
-  struct addrinfo hints;
-  int error, len=-1;
-
-  memset(&hints, 0, sizeof(hints));
-  memset(dst, 0, sizeof(*dst));
-  hints.ai_socktype = SOCK_DGRAM;
-  hints.ai_family = AF_UNSPEC;
-
-  error = getaddrinfo(host, service, &hints, &res);
-
-  if (error != 0) {
-    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(error));
-    return error;
+  addr_info = coap_resolve_address_info(host, port, port,  port, port,
+                                        AF_UNSPEC, scheme_hint_bits,
+                                        COAP_RESOLVE_TYPE_REMOTE);
+  if (addr_info) {
+    ret = 1;
+    *dst = addr_info->addr;
   }
 
-  for (ainfo = res; ainfo != NULL; ainfo = ainfo->ai_next) {
-    switch (ainfo->ai_family) {
-    case AF_INET6:
-    case AF_INET:
-      len = dst->size = ainfo->ai_addrlen;
-      memcpy(&dst->addr.sin6, ainfo->ai_addr, dst->size);
-      goto finish;
-    default:
-      ;
-    }
-  }
-
- finish:
-  freeaddrinfo(res);
-  return len;
+  coap_free_address_info(addr_info);
+  return ret;
 }
-
