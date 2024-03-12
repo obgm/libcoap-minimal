@@ -1,6 +1,6 @@
 # Makefile for libcoap minimal examples
 #
-# Copyright (C) 2018-2023 Olaf Bergmann <bergmann@tzi.org>
+# Copyright (C) 2018-2024 Olaf Bergmann <bergmann@tzi.org>
 #
 
 LIBCOAP?=libcoap-3
