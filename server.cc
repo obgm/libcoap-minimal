@@ -74,9 +74,9 @@ main(void) {
 #ifdef COAP_LISTEN_MCAST_IPV4
   coap_join_mcast_group_intf(ctx, COAP_LISTEN_MCAST_IPV4, NULL);
 #endif /* COAP_LISTEN_MCAST_IPV4 */
-#ifdef COAP_LISTEN_MCAST_IPV4
+#ifdef COAP_LISTEN_MCAST_IPV6
   coap_join_mcast_group_intf(ctx, COAP_LISTEN_MCAST_IPV6, NULL);
-#endif /* COAP_LISTEN_MCAST_IPV4 */
+#endif /* COAP_LISTEN_MCAST_IPV6 */
 
   /* Create a resource that the server can respond to with information */
   resource = coap_resource_init(ruri, 0);
