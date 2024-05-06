@@ -27,7 +27,6 @@ main(void) {
   coap_context_t  *ctx = nullptr;
   coap_resource_t *resource = nullptr;
   int result = EXIT_FAILURE;;
-  coap_str_const_t *ruri = coap_make_str_const("hello");
   uint32_t scheme_hint_bits;
   coap_addr_info_t *info = nullptr;
   coap_addr_info_t *info_list = nullptr;
@@ -46,6 +45,9 @@ main(void) {
     coap_log_emerg("cannot initialize context\n");
     goto finish;
   }
+
+  /* Let libcoap do the multi-block payload handling (if any) */
+  coap_context_set_block_mode(ctx, COAP_BLOCK_USE_LIBCOAP|COAP_BLOCK_SINGLE_BODY);
 
   scheme_hint_bits = coap_get_available_scheme_hint_bits(0, 0, COAP_PROTO_NONE);
   info_list = coap_resolve_address_info(my_address, 0, 0, 0, 0,
@@ -79,7 +81,7 @@ main(void) {
 #endif /* COAP_LISTEN_MCAST_IPV4 */
 
   /* Create a resource that the server can respond to with information */
-  resource = coap_resource_init(ruri, 0);
+  resource = coap_resource_init(coap_make_str_const("hello"), 0);
   coap_register_handler(resource, COAP_REQUEST_GET,
                         [](auto, auto,
                            const coap_pdu_t *request,
