@@ -1,0 +1,37 @@
+name: Build Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - release-*
+      - gh-workflows
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  PLATFORM: posix
+  TESTS: yes
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup
+        run: |
+          sudo apt-get update && sudo apt-get install -y libtool libtool-bin exuberant-ctags
+      - name: configure / build / install libcoap
+        run: |
+          git clone https://github.com/obgm/libcoap.git
+          cd libcoap
+          ./autogen.sh
+          ./configure --with-openssl --disable-documentation --disable-doxygen --disable-man --disable-tests --disable-examples --disable-license-install
+          make
+          sudo make install
+      - name: build minimal
+        run: |
+          LIBCOAP=libcoap-3-openssl make
