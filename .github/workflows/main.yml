@@ -19,6 +19,9 @@ env:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        LIBVER: ["v4.3.4", "develop"]
     steps:
       - uses: actions/checkout@v4
       - name: setup
@@ -28,6 +31,7 @@ jobs:
         run: |
           git clone https://github.com/obgm/libcoap.git
           cd libcoap
+          git checkout ${{matrix.LIBVER}}
           ./autogen.sh
           ./configure --with-openssl --disable-documentation --disable-doxygen --disable-man --disable-tests --disable-examples --disable-license-install
           make
