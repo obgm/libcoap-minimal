@@ -94,6 +94,20 @@ main(void) {
                          });
   coap_add_resource(ctx, resource);
 
+  /* Create another resource that the server can respond to with information */
+  resource = coap_resource_init(coap_make_str_const("hello/my"), 0);
+  coap_register_handler(resource, COAP_REQUEST_GET,
+                        [](auto, auto,
+                           const coap_pdu_t *request,
+                           auto, coap_pdu_t *response) {
+                           coap_show_pdu(COAP_LOG_WARN, request);
+                           coap_pdu_set_code(response, COAP_RESPONSE_CODE_CONTENT);
+                           coap_add_data(response, 8,
+                                         (const uint8_t *)"my world");
+                           coap_show_pdu(COAP_LOG_WARN, response);
+                         });
+  coap_add_resource(ctx, resource);
+
   /* Handle any libcoap I/O requirements */
   while (true) {
     coap_io_process(ctx, COAP_IO_WAIT);
