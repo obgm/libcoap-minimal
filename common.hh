@@ -1,6 +1,6 @@
 /* minimal CoAP functions
  *
- * Copyright (C) 2018-2024 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2018-2026 Olaf Bergmann <bergmann@tzi.org>
  */
 
 #include <coap3/coap.h>
