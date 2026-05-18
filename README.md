@@ -16,7 +16,7 @@ then this is handled by a NON-confirmable request.
 It has two defined resources `/hello` and `hello/my` along with the
 inbuilt resource `.well-known/core`.
 
-Copyright (C) 2018-2024 Olaf Bergmann <bergmann@tzi.org>
+Copyright (C) 2018-2026 Olaf Bergmann <bergmann@tzi.org>
 
 License
 =======
